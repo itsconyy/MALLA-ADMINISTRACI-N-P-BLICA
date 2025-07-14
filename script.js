@@ -88,14 +88,20 @@ function estaDesbloqueado(ramo) {
 function actualizarRamos() {
   container.innerHTML = "";
   let semestreActual = 0;
+  let semestreDiv = null;
 
   ramos.forEach(ramo => {
     if (ramo.semestre !== semestreActual) {
       semestreActual = ramo.semestre;
+      semestreDiv = document.createElement("div");
+      semestreDiv.className = "semestre";
+
       const label = document.createElement("div");
       label.className = "semestre-label";
       label.textContent = `Semestre ${semestreActual}`;
-      container.appendChild(label);
+      semestreDiv.appendChild(label);
+
+      container.appendChild(semestreDiv);
     }
 
     const div = document.createElement("div");
@@ -114,7 +120,7 @@ function actualizarRamos() {
       actualizarRamos();
     };
 
-    container.appendChild(div);
+    semestreDiv.appendChild(div);
   });
 }
 
