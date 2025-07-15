@@ -75,53 +75,38 @@ const ramos = [
   { nombre: "Examen de Título", semestre: 10, requisitos: ["*requiere todos los ramos"] }
 ];
 
-const container = document.getElementById("malla");
-const estadoRamos = {};
+const container = document.getElementById('malla');
+const estado = {};
 
-function estaDesbloqueado(ramo) {
-  return ramo.requisitos.every(req => {
-    if (req.startsWith("*")) return false;
-    return estadoRamos[req];
-  });
+function desbloqueado(ramo) {
+  return ramo.requisitos.every(r => !r.startsWith('*') && estado[r]);
 }
 
-function actualizarRamos() {
-  container.innerHTML = "";
-  let semestreActual = 0;
-  let semestreDiv = null;
-
-  ramos.forEach(ramo => {
-    if (ramo.semestre !== semestreActual) {
-      semestreActual = ramo.semestre;
-      semestreDiv = document.createElement("div");
-      semestreDiv.className = "semestre";
-
-      const label = document.createElement("div");
-      label.className = "semestre-label";
-      label.textContent = `Semestre ${semestreActual}`;
-      semestreDiv.appendChild(label);
-
-      container.appendChild(semestreDiv);
-    }
-
-    const div = document.createElement("div");
-    div.className = "ramo";
-    div.textContent = ramo.nombre;
-
-    const aprobado = estadoRamos[ramo.nombre];
-    const desbloqueado = estaDesbloqueado(ramo);
-
-    if (aprobado) div.classList.add("aprobado");
-    else if (!desbloqueado) div.classList.add("bloqueado");
-
-    div.onclick = () => {
-      if (!desbloqueado) return;
-      estadoRamos[ramo.nombre] = !estadoRamos[ramo.nombre];
-      actualizarRamos();
-    };
-
-    semestreDiv.appendChild(div);
-  });
+function actualizar() {
+  container.innerHTML = '';
+  for (let s = 1; s <= 10; s++) {
+    // columna semestre
+    const label = document.createElement('div');
+    label.className = 'semestre-label';
+    label.textContent = `S${s}`;
+    container.appendChild(label);
+    // ramos
+    ramos
+      .filter(r => r.semestre === s)
+      .forEach(r => {
+        const div = document.createElement('div');
+        div.className = 'ramo';
+        div.textContent = r.nombre;
+        if (estado[r.nombre]) div.classList.add('aprobado');
+        else if (!desbloqueado(r)) div.classList.add('bloqueado');
+        div.onclick = () => {
+          if (!desbloqueado(r)) return;
+          estado[r.nombre] = !estado[r.nombre];
+          actualizar();
+        };
+        container.appendChild(div);
+      });
+  }
 }
 
-actualizarRamos();
+actualizar();
