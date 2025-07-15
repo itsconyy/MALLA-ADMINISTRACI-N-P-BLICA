@@ -1,13 +1,13 @@
 body {
   font-family: 'Segoe UI', sans-serif;
-  background: #e3f2fd;
+  background: #ECD4FF; /* Fondo general */
   margin: 0;
   padding: 20px;
 }
 
 h1 {
   text-align: center;
-  color: #0a3d62;
+  color: #A79AFF; /* Color del título */
   margin-bottom: 30px;
 }
 
@@ -21,7 +21,7 @@ h1 {
 }
 
 .columna-semestre {
-  background-color: #bbdefb;
+  background-color: #C5A3FF; /* Fondo de cada semestre */
   border: 2px solid #0a3d62;
   border-radius: 8px;
   padding: 10px;
@@ -43,7 +43,7 @@ h1 {
 
 .ramo {
   background: white;
-  border: 2px solid #64b5f6;
+  border: 2px solid #C5A3FF; /* Borde de ramos normales */
   padding: 6px;
   font-size: 0.85em;
   border-radius: 5px;
@@ -65,6 +65,6 @@ h1 {
 }
 
 .aprobado {
-  background-color: #a5d6a7;
-  border-color: #388e3c;
+  background-color: #DCD3FF; /* Ramo aprobado */
+  border-color: #A79AFF;
 }
