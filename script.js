@@ -75,38 +75,52 @@ const ramos = [
   { nombre: "Examen de Título", semestre: 10, requisitos: ["*requiere todos los ramos"] }
 ];
 
-const container = document.getElementById('malla');
-const estado = {};
+const container = document.getElementById("malla");
+const estadoRamos = {};
 
-function desbloqueado(ramo) {
-  return ramo.requisitos.every(r => !r.startsWith('*') && estado[r]);
+function estaDesbloqueado(ramo) {
+  return ramo.requisitos.every(req => {
+    if (req.startsWith("*")) return false;
+    return estadoRamos[req];
+  });
 }
 
-function actualizar() {
-  container.innerHTML = '';
+function actualizarRamos() {
+  container.innerHTML = "";
+
   for (let s = 1; s <= 10; s++) {
-    // columna semestre
-    const label = document.createElement('div');
-    label.className = 'semestre-label';
-    label.textContent = `S${s}`;
-    container.appendChild(label);
-    // ramos
+    const columna = document.createElement("div");
+    columna.className = "columna-semestre";
+
+    const label = document.createElement("div");
+    label.className = "semestre-label";
+    label.textContent = `Semestre ${s}`;
+    columna.appendChild(label);
+
     ramos
       .filter(r => r.semestre === s)
-      .forEach(r => {
-        const div = document.createElement('div');
-        div.className = 'ramo';
-        div.textContent = r.nombre;
-        if (estado[r.nombre]) div.classList.add('aprobado');
-        else if (!desbloqueado(r)) div.classList.add('bloqueado');
+      .forEach(ramo => {
+        const div = document.createElement("div");
+        div.className = "ramo";
+        div.textContent = ramo.nombre;
+
+        const aprobado = estadoRamos[ramo.nombre];
+        const desbloqueado = estaDesbloqueado(ramo);
+
+        if (aprobado) div.classList.add("aprobado");
+        else if (!desbloqueado) div.classList.add("bloqueado");
+
         div.onclick = () => {
-          if (!desbloqueado(r)) return;
-          estado[r.nombre] = !estado[r.nombre];
-          actualizar();
+          if (!desbloqueado) return;
+          estadoRamos[ramo.nombre] = !estadoRamos[ramo.nombre];
+          actualizarRamos();
         };
-        container.appendChild(div);
+
+        columna.appendChild(div);
       });
+
+    container.appendChild(columna);
   }
 }
 
-actualizar();
+actualizarRamos();
